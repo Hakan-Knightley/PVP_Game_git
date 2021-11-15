@@ -2,6 +2,10 @@ import random
 import math
 #imports
 
+global min_fighters
+global max_fighters
+#globals
+
 randomiser=0
 fraction=0
 health=0
@@ -13,16 +17,19 @@ defenceR = 0
 speed = 0
 P1_amount = 0
 P2_amount = 0
+min_fighters = 1
+max_fighters = 5
 #integers
+
 bot_string = "How many players would you like the bot to generate?"
 player2_string = "How many players would player 2 like to generate?"
 #strings
+
 P1_fighter_stats=[]
 P2_fighter_stats=[]
 Stats =["Fraction","Role","Health","Melee Attack","Melee Defence","Ranged Attack","Ranged Defence","Speed"]
 #lists
 
-#fix start
 def single_player_or_multiplayer(bot_string,player2_string):
     bot_valid = str(input("Would you like to play multiplayer or single player?"))
     while bot_valid != True and bot_valid != False:
@@ -35,26 +42,25 @@ def single_player_or_multiplayer(bot_string,player2_string):
         else:
             bot_valid = str(input("Sorry, I didn't understand that. Please input either multiplayer or single player"))
     return string,bot_valid
-    #asks if user wants to play multiplayer or single player
-#fix end
+#asks if user wants to play multiplayer or single player
 
 
 def ask_character_amount(P1,P2,string):
     P1=str(input("How many characters would player 1 like to generate?"))
-    while P1.isnumeric() == False or int(P1) >3 or int(P1)<1:
+    while P1.isnumeric() == False or int(P1) >max_fighters or int(P1)<min_fighters:
         try:
             int(P1)
         except:
             print("Please make sure your answer is numerical.")
-        P1=str(input("Enter a value between 1 and 3"))
+        P1=str(input("Enter a value between "+str(min_fighters)+" and "+str(max_fighters)))
     P2=str(input(string))
     #asks either for player 2 or the bot's amount of characters depending on what gamemode was chosen
-    while P2.isnumeric() == False or int(P2) >3 or int(P2)<1:
+    while P2.isnumeric() == False or int(P2) >max_fighters or int(P2)<min_fighters:
         try:
             int(P2)
         except:
             print("Please make sure your answer is numerical.")
-        P2=str(input("Enter a value between 1 and 3"))
+        P2=str(input("Enter a value between "+str(min_fighters)+" and "+str(max_fighters)))
     return P1,P2
     #asks for how many characters to generate for each player
 
@@ -82,7 +88,7 @@ def generate_role(role):
     else:
         role="Speedster"
     return role
-    #randomly generates a character role.
+#randomly generates a character role.
 
 def generate_health(role,health):
     if role[0] =="T":
@@ -194,15 +200,17 @@ def add_character_stats_to_list(amount,fraction,role,health,defenceM,attackM,def
     #Adds stats to list
     return chars
 
-def print_fighter_stats(P1,P2,Stats):
+def print_fighter_stats(P1,P2,Stats,bot_valid):
     print ("\n\nPlayer 1:\n")
     for i in P1:
         print("Fighter #No: ",str(P1.index(i)+1))
         for r in i:
             print(Stats[i.index(r)]+":",r)
         print("\n")
-
-    print ("Player 2:\n")
+    if bot_valid == False:
+        print ("Player 2:\n")
+    else:
+        print ("Bot:\n")
     for i in P2:
         print("Fighter #No: ",str(P2.index(i)+1))
         for r in i:
@@ -216,5 +224,5 @@ P1_fighter_stats =add_character_stats_to_list(P1_amount,fraction,role,health,def
 P2_fighter_stats =add_character_stats_to_list(P2_amount,fraction,role,health,defenceM,attackM,defenceR,attackR,speed)
 #functions that store to a variable
 
-print_fighter_stats(P1_fighter_stats,P2_fighter_stats,Stats)
+print_fighter_stats(P1_fighter_stats,P2_fighter_stats,Stats,bot_valid)
 #output functions
